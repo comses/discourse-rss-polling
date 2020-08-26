@@ -23,7 +23,7 @@ module DiscourseRssPolling
     def all
       YAML.load(SiteSetting.rss_polling_feed_setting)
         .select(&@condition)
-        .map { |(feed_url, author_username)| FeedSetting.new(feed_url: feed_url, author_username: author_username) }
+        .map { |(feed_url, author_username, author_username_embed_key)| FeedSetting.new(feed_url: feed_url, author_username: author_username, author_username_embed_key: author_username_embed_key) }
     end
 
     def take
