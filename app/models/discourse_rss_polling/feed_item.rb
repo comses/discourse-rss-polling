@@ -4,12 +4,19 @@ require_dependency 'feed_item_accessor'
 
 module DiscourseRssPolling
   class FeedItem
-    def initialize(rss_item, accessor = ::FeedItemAccessor)
+    def initialize(rss_item, author, author_username_embed_key, accessor = ::FeedItemAccessor)
       @accessor = accessor.new(rss_item)
+      @author = author
+      @author_username_embed_key = author_username_embed_key
     end
 
     def url
       url?(@accessor.link) ? @accessor.link : @accessor.element_content(:id)
+    end
+
+    def author
+      topic_author_username = @accessor.element_content(@author_username_embed_key)
+      topic_author = User.find_by_username(topic_author_username) || @author
     end
 
     def content

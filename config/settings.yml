@@ -4,7 +4,7 @@ plugins:
     shadowed_by_global: true
 
   # This stores a YAML serialized array of feed setting tuples, in the format of
-  #   [feed_url, author_username]
+  #   [feed_url, author_username, author_username_embed_key]
   rss_polling_feed_setting:
     default: '[]'
     hidden: true

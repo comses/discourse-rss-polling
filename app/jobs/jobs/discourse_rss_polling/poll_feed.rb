@@ -9,6 +9,9 @@ module Jobs
         return unless SiteSetting.rss_polling_enabled
 
         @feed_url = args[:feed_url]
+        # the RSS element storing the topic's preferred author username, if none is found will defer to the default author
+        @author_username_embed_key = args[:author_username_embed_key]
+        # the default author to use if one cannot be found via the embed key
         @author = User.find_by_username(args[:author_username])
 
         poll_feed if not_polled_recently?
@@ -16,7 +19,7 @@ module Jobs
 
       private
 
-      attr_reader :feed_url, :author
+      attr_reader :feed_url, :author, :author_username_embed_key
 
       def feed_key
         "rss-polling-feed-polled:#{Digest::SHA1.hexdigest(feed_url)}"
@@ -28,7 +31,7 @@ module Jobs
 
       def poll_feed
         topics_polled_from_feed.each do |topic|
-          TopicEmbed.import(author, topic.url, topic.title, CGI.unescapeHTML(topic.content)) if topic.content.present?
+          TopicEmbed.import(topic.author, topic.url, topic.title, CGI.unescapeHTML(topic.content)) if topic.content.present?
         end
       end
 
@@ -36,7 +39,7 @@ module Jobs
         raw_feed = fetch_raw_feed
         return [] if raw_feed.blank?
 
-        RSS::Parser.parse(raw_feed).items.map { |item| ::DiscourseRssPolling::FeedItem.new(item) }
+        RSS::Parser.parse(raw_feed).items.map { |item| ::DiscourseRssPolling::FeedItem.new(item, @author, @author_username_embed_key) }
       rescue RSS::NotWellFormedError, RSS::InvalidRSSError
         []
       end
