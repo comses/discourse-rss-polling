@@ -3,6 +3,7 @@
   <tr>
     <th>{{i18n 'admin.rss_polling.feed_url'}}</th>
     <th>{{i18n 'admin.rss_polling.author'}}</th>
+    <th>{{i18n 'admin.rss_polling.author_username_embed_key'}}</th>
     <th>
       {{d-button
         icon="save"
@@ -31,6 +32,13 @@
         }}
       </td>
       <td>
+      {{input
+        value=setting.author_username_embed_key
+        placeholder="dc:creator"
+        disabled=saving
+      }}
+      </td>
+      <td>
         {{d-button
           icon="times"
           action="destroy"
@@ -42,6 +50,7 @@
   {{/each}}
 
   <tr>
+    <td></td>
     <td></td>
     <td></td>
     <td>
