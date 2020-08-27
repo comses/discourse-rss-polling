@@ -14,9 +14,9 @@ module DiscourseRssPolling
       url?(@accessor.link) ? @accessor.link : @accessor.element_content(:id)
     end
 
-    def author
+    def discourse_author
       topic_author_username = @accessor.element_content(@author_username_embed_key)
-      topic_author = User.find_by_username(topic_author_username) || @author
+      User.find_by_username(topic_author_username) || @author
     end
 
     def content

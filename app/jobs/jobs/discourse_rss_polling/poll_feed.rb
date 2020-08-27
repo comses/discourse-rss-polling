@@ -31,7 +31,7 @@ module Jobs
 
       def poll_feed
         topics_polled_from_feed.each do |topic|
-          TopicEmbed.import(topic.author, topic.url, topic.title, CGI.unescapeHTML(topic.content)) if topic.content.present?
+          TopicEmbed.import(topic.discourse_author, topic.url, topic.title, CGI.unescapeHTML(topic.content)) if topic.content.present?
         end
       end
 
